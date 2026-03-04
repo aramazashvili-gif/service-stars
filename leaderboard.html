@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+<html lang="ka">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lopota Resort — Service Stars</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Jost:wght@300;400;500;600&family=Space+Grotesk:wght@400;500;600;700&family=DM+Serif+Display&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+/* ═══════════════════════════════════
+   THEME SYSTEM
+═══════════════════════════════════ */
+
+/* Theme 1: Sage Morning — soft warm white + sage green */
+body.t1{
+  --bg:#F4F8F4;--bg2:#FFFFFF;--card:#FFFFFF;--surface:#EBF2EB;--mid:#D6E8D6;
+  --border:rgba(74,140,90,.14);--border-hi:rgba(74,140,90,.45);
+  --accent:#3A8C52;--accent2:#5AAD6F;--accent3:#256638;
+  --text:#1A2E1E;--muted:#5C7A63;--green:#2E9E56;
+  --font-head:'Playfair Display',serif;--font-body:'Jost',sans-serif;
+  --radius:12px;--radius-lg:20px;
+  --glow:rgba(74,140,90,.06);
+}
+/* Theme 2: Mint Breeze — crisp pale mint, airy */
+body.t2{
+  --bg:#F0FAF5;--bg2:#FFFFFF;--card:#FFFFFF;--surface:#E4F5EC;--mid:#CCE9D8;
+  --border:rgba(16,168,100,.13);--border-hi:rgba(16,168,100,.42);
+  --accent:#0FAD6A;--accent2:#3DC98A;--accent3:#077A49;
+  --text:#0D2A1E;--muted:#4A8068;--green:#0FAD6A;
+  --font-head:'Syne',sans-serif;--font-body:'Space Grotesk',sans-serif;
+  --radius:10px;--radius-lg:18px;
+  --glow:rgba(16,168,100,.05);
+}
+/* Theme 3: Forest Linen — warm linen + deep forest */
+body.t3{
+  --bg:#F7F5EE;--bg2:#FFFFFF;--card:#FFFFFF;--surface:#EFF0E8;--mid:#DDE3D2;
+  --border:rgba(60,100,60,.13);--border-hi:rgba(60,100,60,.42);
+  --accent:#3D6E3D;--accent2:#5E9B5E;--accent3:#254525;
+  --text:#1C2A1C;--muted:#607060;--green:#3D7A3D;
+  --font-head:'DM Serif Display',serif;--font-body:'Jost',sans-serif;
+  --radius:14px;--radius-lg:22px;
+  --glow:rgba(60,100,60,.05);
+}
+/* Theme 4: Emerald Dusk — deep rich emerald on charcoal */
+body.t4{
+  --bg:#111A14;--bg2:#182B1E;--card:#1C3023;--surface:#223829;--mid:#284030;
+  --border:rgba(72,200,120,.14);--border-hi:rgba(72,200,120,.45);
+  --accent:#48C878;--accent2:#7ADBA0;--accent3:#259650;
+  --text:#E8F5EC;--muted:#7AAE8A;--green:#48C878;
+  --font-head:'Playfair Display',serif;--font-body:'Space Grotesk',sans-serif;
+  --radius:12px;--radius-lg:20px;
+  --glow:rgba(72,200,120,.07);
+}
+/* Theme 5: Celadon Mist — ultra-soft grey-green, minimal */
+body.t5{
+  --bg:#F5F8F5;--bg2:#FAFCFA;--card:#FAFCFA;--surface:#EBF0EB;--mid:#D8E4D8;
+  --border:rgba(100,140,100,.12);--border-hi:rgba(60,120,80,.4);
+  --accent:#3C7850;--accent2:#5E9E72;--accent3:#245538;
+  --text:#1E301E;--muted:#6A8A6A;--green:#3C9A5A;
+  --font-head:'Syne',sans-serif;--font-body:'Space Grotesk',sans-serif;
+  --radius:16px;--radius-lg:26px;
+  --glow:rgba(60,120,80,.04);
+}
+.t1 .criteria-card,.t2 .criteria-card,.t3 .criteria-card,.t5 .criteria-card{box-shadow:0 2px 12px rgba(0,0,0,.08);backdrop-filter:blur(2px);background:rgba(255,255,255,0.82)!important}
+.t1 .card,.t2 .card,.t3 .card,.t5 .card,.t1 .modal,.t2 .modal,.t3 .modal,.t5 .modal{backdrop-filter:blur(10px)}
+.t1 .lb-table tbody tr,.t2 .lb-table tbody tr,.t3 .lb-table tbody tr,.t5 .lb-table tbody tr{backdrop-filter:blur(2px)}
+.t1 .lb-table tbody tr,.t2 .lb-table tbody tr,.t3 .lb-table tbody tr,.t5 .lb-table tbody tr{box-shadow:0 1px 6px rgba(0,0,0,.07);background:rgba(255,255,255,0.82)!important}
+.t1 .modal,.t2 .modal,.t3 .modal,.t5 .modal{box-shadow:0 20px 60px rgba(0,0,0,.15);background:rgba(255,255,255,0.92)!important;backdrop-filter:blur(16px)}
+.t1 input,.t1 select,.t1 textarea,.t2 input,.t2 select,.t2 textarea,.t3 input,.t3 select,.t3 textarea,.t5 input,.t5 select,.t5 textarea{background:#fff}
+
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--text);font-family:var(--font-body);min-height:100vh;overflow-x:hidden;transition:background .4s,color .4s}
+
+/* ── LOPOTA LANDSCAPE BACKGROUND ── */
+body::before{
+  content:'';
+  position:fixed;inset:0;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 900' preserveAspectRatio='xMidYMid slice'%3E%3Cdefs%3E%3ClinearGradient id='sky' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0%25' stop-color='%23B6D8F0'/%3E%3Cstop offset='40%25' stop-color='%23CCE8F4'/%3E%3Cstop offset='75%25' stop-color='%23DAF0EA'/%3E%3Cstop offset='100%25' stop-color='%23C8E8DC'/%3E%3C/linearGradient%3E%3ClinearGradient id='lk' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0%25' stop-color='%235FA8CC'/%3E%3Cstop offset='50%25' stop-color='%234090B8'/%3E%3Cstop offset='100%25' stop-color='%23336E96'/%3E%3C/linearGradient%3E%3ClinearGradient id='m1' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0%25' stop-color='%23EAEDE8'/%3E%3Cstop offset='100%25' stop-color='%23BCC8B8'/%3E%3C/linearGradient%3E%3ClinearGradient id='m2' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0%25' stop-color='%23CCDBBC'/%3E%3Cstop offset='100%25' stop-color='%2398B488'/%3E%3C/linearGradient%3E%3ClinearGradient id='m3' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0%25' stop-color='%23A8C498'/%3E%3Cstop offset='100%25' stop-color='%2370A060'/%3E%3C/linearGradient%3E%3ClinearGradient id='h1' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0%25' stop-color='%2360A050'/%3E%3Cstop offset='100%25' stop-color='%23408038'/%3E%3C/linearGradient%3E%3ClinearGradient id='h2' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0%25' stop-color='%23508848'/%3E%3Cstop offset='100%25' stop-color='%23306028'/%3E%3C/linearGradient%3E%3ClinearGradient id='fg' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0%25' stop-color='%23285A20'/%3E%3Cstop offset='100%25' stop-color='%23183C10'/%3E%3C/linearGradient%3E%3ClinearGradient id='vin' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0%25' stop-color='%23709858'/%3E%3Cstop offset='100%25' stop-color='%23507040'/%3E%3C/linearGradient%3E%3ClinearGradient id='wtr' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0%25' stop-color='%23C8A870'/%3E%3Cstop offset='100%25' stop-color='%23A07840'/%3E%3C/linearGradient%3E%3ClinearGradient id='cot' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0%25' stop-color='%23F2EEE0'/%3E%3Cstop offset='100%25' stop-color='%23D8D0B8'/%3E%3C/linearGradient%3E%3Cfilter id='bl3'%3E%3CfeGaussianBlur stdDeviation='3'/%3E%3C/filter%3E%3Cfilter id='bl1'%3E%3CfeGaussianBlur stdDeviation='1'/%3E%3C/filter%3E%3Cfilter id='bl5'%3E%3CfeGaussianBlur stdDeviation='5'/%3E%3C/filter%3E%3C/defs%3E%3C!-- SKY --%3E%3Crect width='1440' height='900' fill='url(%23sky)'/%3E%3C!-- CLOUDS layer 1 far --%3E%3Cellipse cx='250' cy='110' rx='200' ry='42' fill='white' opacity='0.5' filter='url(%23bl3)'/%3E%3Cellipse cx='380' cy='95' rx='140' ry='30' fill='white' opacity='0.4' filter='url(%23bl3)'/%3E%3Cellipse cx='760' cy='80' rx='220' ry='38' fill='white' opacity='0.42' filter='url(%23bl3)'/%3E%3Cellipse cx='950' cy='100' rx='170' ry='35' fill='white' opacity='0.38' filter='url(%23bl3)'/%3E%3Cellipse cx='1280' cy='115' rx='190' ry='40' fill='white' opacity='0.45' filter='url(%23bl3)'/%3E%3C!-- CLOUDS layer 2 mid --%3E%3Cellipse cx='150' cy='150' rx='120' ry='25' fill='white' opacity='0.25' filter='url(%23bl5)'/%3E%3Cellipse cx='1100' cy='140' rx='130' ry='28' fill='white' opacity='0.28' filter='url(%23bl5)'/%3E%3C!-- CAUCASUS FAR PEAKS (snow) --%3E%3Cpolygon points='0,400 80,220 160,380 260,180 360,360 460,200 560,370 660,160 760,350 860,175 960,360 1060,195 1160,370 1260,210 1360,375 1440,280 1440,500 0,500' fill='url(%23m1)' opacity='0.72' filter='url(%23bl3)'/%3E%3C!-- snow caps precise --%3E%3Cpolygon points='80,220 102,252 58,252' fill='%23F5F8FA' opacity='0.85'/%3E%3Cpolygon points='260,180 286,218 234,218' fill='%23F5F8FA' opacity='0.82'/%3E%3Cpolygon points='460,200 488,235 432,235' fill='%23F5F8FA' opacity='0.78'/%3E%3Cpolygon points='660,160 690,200 630,200' fill='%23F5F8FA' opacity='0.88'/%3E%3Cpolygon points='860,175 890,212 830,212' fill='%23F5F8FA' opacity='0.85'/%3E%3Cpolygon points='1060,195 1090,230 1030,230' fill='%23F5F8FA' opacity='0.80'/%3E%3Cpolygon points='1260,210 1288,245 1232,245' fill='%23F5F8FA' opacity='0.78'/%3E%3C!-- snow shadow --%3E%3Cpolygon points='80,220 102,252 80,250' fill='%23C8D8E8' opacity='0.5'/%3E%3Cpolygon points='660,160 690,200 665,196' fill='%23C8D8E8' opacity='0.5'/%3E%3Cpolygon points='860,175 890,212 862,208' fill='%23C8D8E8' opacity='0.5'/%3E%3C!-- MID MOUNTAIN RIDGE green --%3E%3Cpolygon points='0,470 150,320 300,460 450,300 600,440 750,285 900,440 1050,310 1200,450 1350,310 1440,410 1440,580 0,580' fill='url(%23m2)' opacity='0.88' filter='url(%23bl1)'/%3E%3C!-- NEAR RIDGE --%3E%3Cpath d='M0,530 Q180,400 360,510 Q500,580 640,450 Q780,320 920,470 Q1060,580 1200,430 Q1320,360 1440,470 L1440,640 L0,640Z' fill='url(%23m3)' opacity='0.92'/%3E%3C!-- FOREST SPA HILLSIDE (right) - dense dark forest on slope --%3E%3Cpath d='M820,480 Q920,420 1060,460 Q1180,490 1300,450 Q1380,430 1440,440 L1440,680 Q1300,660 1150,650 Q980,640 850,660 Q830,580 820,480Z' fill='url(%23h2)' opacity='0.95'/%3E%3C!-- Forest texture dots on spa hill --%3E%3Ccircle cx='880' cy='500' r='18' fill='%23285018' opacity='0.5'/%3E%3Ccircle cx='920' cy='480' r='22' fill='%23305820' opacity='0.45'/%3E%3Ccircle cx='960' cy='490' r='16' fill='%23284E18' opacity='0.5'/%3E%3Ccircle cx='1000' cy='475' r='20' fill='%23306020' opacity='0.45'/%3E%3Ccircle cx='1040' cy='468' r='18' fill='%23285018' opacity='0.48'/%3E%3Ccircle cx='1080' cy='478' r='22' fill='%23306020' opacity='0.42'/%3E%3Ccircle cx='1120' cy='465' r='17' fill='%23285018' opacity='0.46'/%3E%3Ccircle cx='1160' cy='472' r='19' fill='%23305820' opacity='0.44'/%3E%3Ccircle cx='900' cy='520' r='20' fill='%23284E18' opacity='0.5'/%3E%3Ccircle cx='940' cy='510' r='17' fill='%23306020' opacity='0.45'/%3E%3Ccircle cx='980' cy='505' r='21' fill='%23285018' opacity='0.48'/%3E%3Ccircle cx='1020' cy='498' r='16' fill='%23305820' opacity='0.42'/%3E%3C!-- FOREST SPA BUILDING on hillside --%3E%3Crect x='990' y='470' width='80' height='35' rx='3' fill='%23E8E0D0' opacity='0.7'/%3E%3Crect x='1000' y='458' width='60' height='16' rx='2' fill='%23786050' opacity='0.6'/%3E%3Crect x='998' y='500' width='12' height='14' rx='1' fill='%23A8C8D8' opacity='0.8'/%3E%3Crect x='1016' y='500' width='12' height='14' rx='1' fill='%23A8C8D8' opacity='0.8'/%3E%3Crect x='1034' y='500' width='12' height='14' rx='1' fill='%23A8C8D8' opacity='0.8'/%3E%3Crect x='1052' y='500' width='12' height='14' rx='1' fill='%23A8C8D8' opacity='0.8'/%3E%3C!-- PATH TO FOREST SPA --%3E%3Cpath d='M960,560 Q990,520 1020,500' stroke='%23C8B890' stroke-width='3' fill='none' opacity='0.6' stroke-dasharray='6,4'/%3E%3C!-- ROLLING HILLS - main resort area --%3E%3Cpath d='M0,600 Q180,550 380,580 Q540,600 720,555 Q900,510 1050,560 Q1200,600 1440,560 L1440,760 L0,760Z' fill='url(%23h1)' opacity='0.97'/%3E%3C!-- LAKE LOPOTA - central, natural shape --%3E%3Cellipse cx='680' cy='605' rx='310' ry='68' fill='url(%23lk)' opacity='0.92'/%3E%3C!-- Lake edge soft --%3E%3Cellipse cx='680' cy='605' rx='314' ry='72' fill='none' stroke='%2348A0C0' stroke-width='2' opacity='0.3'/%3E%3C!-- Lake reflections / shimmer --%3E%3Cellipse cx='620' cy='595' rx='90' ry='14' fill='white' opacity='0.22' transform='rotate(-8,620,595)'/%3E%3Cellipse cx='760' cy='618' rx='70' ry='10' fill='white' opacity='0.16' transform='rotate(5,760,618)'/%3E%3Cellipse cx='680' cy='608' rx='50' ry='7' fill='white' opacity='0.28'/%3E%3C!-- Mountain reflection in lake --%3E%3Cellipse cx='680' cy='620' rx='200' ry='30' fill='%2380B8C8' opacity='0.2' filter='url(%23bl1)'/%3E%3C!-- WOODEN JETTY / PIER --%3E%3Crect x='650' y='595' width='6' height='50' rx='2' fill='url(%23wtr)' opacity='0.85'/%3E%3Crect x='648' y='640' width='80' height='5' rx='2' fill='url(%23wtr)' opacity='0.85'/%3E%3Crect x='660' y='608' width='4' height='32' rx='1' fill='url(%23wtr)' opacity='0.75'/%3E%3Crect x='672' y='608' width='4' height='32' rx='1' fill='url(%23wtr)' opacity='0.75'/%3E%3Crect x='684' y='608' width='4' height='32' rx='1' fill='url(%23wtr)' opacity='0.75'/%3E%3Crect x='696' y='608' width='4' height='32' rx='1' fill='url(%23wtr)' opacity='0.75'/%3E%3Crect x='708' y='614' width='4' height='26' rx='1' fill='url(%23wtr)' opacity='0.7'/%3E%3Crect x='720' y='619' width='4' height='21' rx='1' fill='url(%23wtr)' opacity='0.65'/%3E%3C!-- SMALL BOAT on lake --%3E%3Cellipse cx='590' cy='600' rx='16' ry='5' fill='%23E8E0D0' opacity='0.7'/%3E%3Crect x='596' y='594' width='2' height='14' fill='%23A09070' opacity='0.6'/%3E%3Cpath d='M596,596 L610,600 L596,604Z' fill='%23F0E8D0' opacity='0.5'/%3E%3C!-- RESORT COTTAGES - lakeside, left bank --%3E%3C!-- Cottage cluster 1 --%3E%3Crect x='360' y='568' width='52' height='30' rx='3' fill='url(%23cot)' opacity='0.88'/%3E%3Cpolygon points='356,572 412,572 384,552' fill='%23786050' opacity='0.75'/%3E%3Crect x='368' y='576' width='10' height='12' rx='1' fill='%23A8C8D8' opacity='0.9'/%3E%3Crect x='384' y='576' width='10' height='12' rx='1' fill='%23A8C8D8' opacity='0.9'/%3E%3Crect x='400' y='576' width='10' height='12' rx='1' fill='%23A8C8D8' opacity='0.9'/%3E%3C!-- Cottage cluster 2 --%3E%3Crect x='420' y='575' width='48' height='28' rx='3' fill='url(%23cot)' opacity='0.85'/%3E%3Cpolygon points='416,579 468,579 442,560' fill='%23786050' opacity='0.72'/%3E%3Crect x='428' y='582' width='10' height='11' rx='1' fill='%23A8C8D8' opacity='0.85'/%3E%3Crect x='444' y='582' width='10' height='11' rx='1' fill='%23A8C8D8' opacity='0.85'/%3E%3C!-- Cottage cluster 3 (right bank) --%3E%3Crect x='820' y='572' width='50' height='28' rx='3' fill='url(%23cot)' opacity='0.85'/%3E%3Cpolygon points='816,576 870,576 843,557' fill='%23786050' opacity='0.72'/%3E%3Crect x='826' y='579' width='10' height='11' rx='1' fill='%23A8C8D8' opacity='0.85'/%3E%3Crect x='842' y='579' width='10' height='11' rx='1' fill='%23A8C8D8' opacity='0.85'/%3E%3Crect x='858' y='579' width='10' height='11' rx='1' fill='%23A8C8D8' opacity='0.85'/%3E%3C!-- MAIN HOTEL BUILDING (center-left) --%3E%3Crect x='460' y='555' width='120' height='45' rx='3' fill='url(%23cot)' opacity='0.92'/%3E%3Cpolygon points='455,559 580,559 518,534' fill='%23786050' opacity='0.8'/%3E%3Crect x='470' y='567' width='14' height='18' rx='1' fill='%23A8C8D8' opacity='0.88'/%3E%3Crect x='492' y='567' width='14' height='18' rx='1' fill='%23A8C8D8' opacity='0.88'/%3E%3Crect x='514' y='567' width='14' height='18' rx='1' fill='%23A8C8D8' opacity='0.88'/%3E%3Crect x='536' y='567' width='14' height='18' rx='1' fill='%23A8C8D8' opacity='0.88'/%3E%3Crect x='558' y='567' width='14' height='18' rx='1' fill='%23A8C8D8' opacity='0.85'/%3E%3C!-- VINEYARD TERRACES (left hillside) --%3E%3Cpath d='M0,620 Q100,600 220,615 L220,760 L0,760Z' fill='url(%23vin)' opacity='0.9'/%3E%3C!-- vine rows --%3E%3Cpath d='M10,630 Q110,618 210,628' stroke='%23284018' stroke-width='1.5' fill='none' opacity='0.55'/%3E%3Cpath d='M10,645 Q110,633 210,643' stroke='%23284018' stroke-width='1.5' fill='none' opacity='0.52'/%3E%3Cpath d='M10,660 Q110,648 210,658' stroke='%23284018' stroke-width='1.5' fill='none' opacity='0.5'/%3E%3Cpath d='M10,675 Q110,663 210,673' stroke='%23284018' stroke-width='1.5' fill='none' opacity='0.48'/%3E%3Cpath d='M10,690 Q110,678 210,688' stroke='%23284018' stroke-width='1.5' fill='none' opacity='0.46'/%3E%3Cpath d='M10,705 Q110,693 210,703' stroke='%23284018' stroke-width='1.5' fill='none' opacity='0.44'/%3E%3Cpath d='M10,720 Q110,708 210,718' stroke='%23284018' stroke-width='1.5' fill='none' opacity='0.42'/%3E%3C!-- vine posts --%3E%3Cline x1='50' y1='625' x2='50' y2='730' stroke='%23604820' stroke-width='1.5' opacity='0.4'/%3E%3Cline x1='100' y1='620' x2='100' y2='728' stroke='%23604820' stroke-width='1.5' opacity='0.4'/%3E%3Cline x1='150' y1='618' x2='150' y2='725' stroke='%23604820' stroke-width='1.5' opacity='0.4'/%3E%3Cline x1='200' y1='623' x2='200' y2='730' stroke='%23604820' stroke-width='1.5' opacity='0.4'/%3E%3C!-- VINEYARD RIGHT SIDE (Chateau Buera hint) --%3E%3Cpath d='M1200,600 Q1300,580 1440,590 L1440,760 L1200,760Z' fill='url(%23vin)' opacity='0.88'/%3E%3Cpath d='M1210,615 Q1310,602 1430,610' stroke='%23284018' stroke-width='1.5' fill='none' opacity='0.5'/%3E%3Cpath d='M1210,632 Q1310,619 1430,627' stroke='%23284018' stroke-width='1.5' fill='none' opacity='0.47'/%3E%3Cpath d='M1210,649 Q1310,636 1430,644' stroke='%23284018' stroke-width='1.5' fill='none' opacity='0.44'/%3E%3Cpath d='M1210,666 Q1310,653 1430,661' stroke='%23284018' stroke-width='1.5' fill='none' opacity='0.42'/%3E%3Cpath d='M1210,683 Q1310,670 1430,678' stroke='%23284018' stroke-width='1.5' fill='none' opacity='0.4'/%3E%3Cline x1='1250' y1='608' x2='1250' y2='690' stroke='%23604820' stroke-width='1.5' opacity='0.38'/%3E%3Cline x1='1300' y1='600' x2='1300' y2='688' stroke='%23604820' stroke-width='1.5' opacity='0.38'/%3E%3Cline x1='1350' y1='595' x2='1350' y2='685' stroke='%23604820' stroke-width='1.5' opacity='0.38'/%3E%3Cline x1='1400' y1='600' x2='1400' y2='688' stroke='%23604820' stroke-width='1.5' opacity='0.38'/%3E%3C!-- CYPRESS TREES (Georgian landscape signature) --%3E%3Cellipse cx='230' cy='575' rx='7' ry='30' fill='%23204818' opacity='0.8'/%3E%3Cellipse cx='248' cy='570' rx='7' ry='34' fill='%23284E20' opacity='0.78'/%3E%3Cellipse cx='266' cy='572' rx='7' ry='31' fill='%23204818' opacity='0.75'/%3E%3Cellipse cx='800' cy='570' rx='7' ry='32' fill='%23204818' opacity='0.78'/%3E%3Cellipse cx='818' cy='565' rx='7' ry='35' fill='%23284E20' opacity='0.76'/%3E%3C!-- BROADLEAF TREES scattered --%3E%3Ccircle cx='310' cy='578' r='22' fill='%23306828' opacity='0.8'/%3E%3Ccircle cx='336' cy='572' r='18' fill='%23387030' opacity='0.75'/%3E%3Ccircle cx='755' cy='574' r='20' fill='%23306828' opacity='0.78'/%3E%3Ccircle cx='779' cy='569' r='16' fill='%23387030' opacity='0.72'/%3E%3Ccircle cx='1190' cy='570' r='18' fill='%23306828' opacity='0.75'/%3E%3Ccircle cx='1168' cy='576' r='15' fill='%23387030' opacity='0.7'/%3E%3C!-- FOREGROUND BUSHES / MEADOW --%3E%3Cpath d='M0,750 Q360,720 720,735 Q1080,750 1440,725 L1440,900 L0,900Z' fill='url(%23fg)' opacity='0.98'/%3E%3C!-- meadow texture - light patches --%3E%3Cellipse cx='200' cy='770' rx='60' ry='12' fill='%23387030' opacity='0.4'/%3E%3Cellipse cx='500' cy='758' rx='80' ry='10' fill='%23407838' opacity='0.35'/%3E%3Cellipse cx='900' cy='755' rx='70' ry='11' fill='%23387030' opacity='0.38'/%3E%3Cellipse cx='1200' cy='765' rx='65' ry='12' fill='%23407838' opacity='0.36'/%3E%3C!-- WALKING PATH around lake --%3E%3Cpath d='M370,610 Q420,635 480,640 Q560,648 650,645 Q720,643 800,638 Q870,632 910,615' stroke='%23C8B890' stroke-width='4' fill='none' opacity='0.55' stroke-linecap='round'/%3E%3C!-- POOL (resort has outdoor pool) --%3E%3Crect x='568' y='605' width='42' height='24' rx='8' fill='%2360C0D8' opacity='0.7'/%3E%3Crect x='570' y='607' width='38' height='20' rx='7' fill='%2378D0E8' opacity='0.5'/%3E%3C!-- SUN / morning light glow top right --%3E%3Ccircle cx='1300' cy='80' r='55' fill='%23FFF0A0' opacity='0.25' filter='url(%23bl5)'/%3E%3Ccircle cx='1300' cy='80' r='30' fill='%23FFE878' opacity='0.3' filter='url(%23bl3)'/%3E%3C!-- Golden hour light rays --%3E%3Cpath d='M1300,80 L1440,300' stroke='%23FFE090' stroke-width='2' opacity='0.1'/%3E%3Cpath d='M1300,80 L1440,200' stroke='%23FFE090' stroke-width='1.5' opacity='0.08'/%3E%3Cpath d='M1300,80 L1200,300' stroke='%23FFE090' stroke-width='1.5' opacity='0.08'/%3E%3C/svg%3E");
+  background-size:cover;
+  background-position:center bottom;
+  background-attachment:fixed;
+  pointer-events:none;
+  z-index:0;
+  transition:opacity .4s;
+}
+
+/* Per-theme overlay tint */
+body::after{
+  content:'';
+  position:fixed;inset:0;
+  pointer-events:none;
+  z-index:0;
+  transition:background .4s;
+}
+body.t1::after{background:rgba(244,248,244,0.68)}
+body.t2::after{background:rgba(240,250,245,0.65)}
+body.t3::after{background:rgba(247,245,238,0.70)}
+body.t4::after{background:rgba(14,22,16,0.76)}
+body.t5::after{background:rgba(245,248,245,0.72)}
+
+.container{max-width:1100px;margin:0 auto;padding:0 24px;position:relative;z-index:1}
+
+/* ── THEME SWITCHER ── */
+.theme-bar{
+  display:flex;justify-content:center;gap:10px;padding:16px 0 0;
+  position:relative;z-index:2;flex-wrap:wrap;
+}
+.theme-btn{
+  width:28px;height:28px;border-radius:50%;border:2px solid transparent;
+  cursor:pointer;transition:all .2s;flex-shrink:0;
+}
+.theme-btn:hover{transform:scale(1.2)}
+.theme-btn.active{border-color:var(--text);box-shadow:0 0 0 2px var(--accent)}
+.tb1{background:linear-gradient(135deg,#5AAD6F,#F4F8F4)}
+.tb2{background:linear-gradient(135deg,#0FAD6A,#E4F5EC)}
+.tb3{background:linear-gradient(135deg,#5E9B5E,#F7F5EE)}
+.tb4{background:linear-gradient(135deg,#48C878,#182B1E)}
+.tb5{background:linear-gradient(135deg,#5E9E72,#F5F8F5)}
+.theme-label{font-size:10px;color:var(--muted);letter-spacing:2px;text-transform:uppercase;align-self:center;margin-right:4px}
+
+/* ── HEADER ── */
+header{text-align:center;padding:44px 24px 32px}
+.resort-label{font-size:11px;letter-spacing:4px;text-transform:uppercase;color:var(--accent);margin-bottom:12px;opacity:.9}
+header h1{font-family:var(--font-head);font-size:clamp(28px,6vw,52px);font-weight:700;color:var(--text);line-height:1.15}
+header h1 span{color:var(--accent)}
+.header-divider{display:flex;align-items:center;justify-content:center;gap:14px;margin:16px auto 0;max-width:320px}
+.header-divider::before{content:'';flex:1;height:1px;background:linear-gradient(90deg,transparent,var(--accent3))}
+.header-divider::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,var(--accent3),transparent)}
+.divider-diamond{width:6px;height:6px;background:var(--accent);transform:rotate(45deg);flex-shrink:0}
+.month-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(0,0,0,.15);border:1px solid var(--border-hi);border-radius:100px;padding:6px 18px;font-size:12px;letter-spacing:1.5px;text-transform:uppercase;color:var(--accent2);margin-top:20px}
+.t4 .month-badge{background:rgba(72,200,120,.08)}
+.month-badge .dot{width:6px;height:6px;border-radius:50%;background:var(--green);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(.7)}}
+
+/* ── CRITERIA ── */
+.criteria-section{margin:32px 0 40px}
+.criteria-section h2{font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--muted);margin-bottom:14px;text-align:center}
+.criteria-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(196px,1fr));gap:10px}
+.criteria-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:14px 16px;display:flex;align-items:center;gap:12px;transition:border-color .2s}
+
+.criteria-card:hover{border-color:var(--border-hi)}
+.crit-icon{font-size:20px;flex-shrink:0}
+.crit-name{font-size:12px;color:var(--muted);margin-bottom:2px}
+.crit-pts{font-family:var(--font-head);font-size:20px;color:var(--accent);font-weight:600}
+.crit-pts span{font-family:var(--font-body);font-size:11px;color:var(--muted);font-weight:400}
+
+/* ── LB HEADER ── */
+.lb-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;flex-wrap:wrap;gap:12px}
+.lb-title{font-family:var(--font-head);font-size:22px;color:var(--text)}
+.admin-btn{background:transparent;border:1px solid var(--border-hi);color:var(--accent);padding:8px 20px;border-radius:100px;font-family:var(--font-body);font-size:12px;letter-spacing:1px;cursor:pointer;transition:all .2s}
+.admin-btn:hover{background:var(--glow);border-color:var(--accent)}
+
+/* ── TABLE ── */
+.lb-table{width:100%;border-collapse:separate;border-spacing:0 7px;margin-bottom:40px}
+.lb-table thead th{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);padding:0 14px 8px;text-align:left;font-weight:500;border-bottom:1px solid var(--border)}
+.lb-table thead th.th-right{text-align:right}
+.lb-table tbody tr{background:var(--card);cursor:pointer;transition:all .2s}
+.t4 .lb-table tbody tr{box-shadow:none}
+.lb-table tbody tr:hover td{background:var(--surface)}
+.lb-table tbody tr.top-row td{background:linear-gradient(90deg,color-mix(in srgb,var(--accent) 8%,var(--card)),var(--card))}
+.lb-table tbody tr.top-row:hover td{background:linear-gradient(90deg,color-mix(in srgb,var(--accent) 13%,var(--surface)),var(--surface))}
+.lb-table tbody td{padding:14px 14px;vertical-align:middle;border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+.lb-table tbody td:first-child{border-left:1px solid var(--border);border-radius:var(--radius) 0 0 var(--radius);padding-left:18px}
+.lb-table tbody tr.top-row td:first-child{border-left:2px solid var(--accent)}
+.lb-table tbody td:last-child{border-right:1px solid var(--border);border-radius:0 var(--radius) var(--radius) 0;padding-right:18px}
+
+.rank-badge{width:34px;height:34px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-family:var(--font-head);font-size:13px;font-weight:700;color:var(--muted);background:rgba(128,128,128,.07);border:1px solid var(--border)}
+.rank-badge.gold{background:color-mix(in srgb,var(--accent) 18%,transparent);border-color:var(--accent);color:var(--accent);font-size:18px}
+.rank-badge.silver{background:rgba(170,185,195,.1);border-color:#9AAAB4;color:#C0CDD6;font-size:18px}
+.rank-badge.bronze{background:rgba(175,125,75,.1);border-color:#B08050;color:#C8A070;font-size:18px}
+
+.emp-cell{display:flex;align-items:center;gap:13px}
+.emp-avatar{width:44px;height:44px;border-radius:50%;flex-shrink:0;background:var(--mid);border:1.5px solid var(--border);display:flex;align-items:center;justify-content:center;font-family:var(--font-head);font-size:14px;font-weight:700;color:var(--accent)}
+.top-row .emp-avatar{border-color:var(--border-hi)}
+.emp-fullname{font-size:14px;font-weight:600;color:var(--text);line-height:1.2}
+.emp-hint{font-size:10px;color:var(--muted);margin-top:2px}
+.position-tag{display:inline-block;background:rgba(128,128,128,.06);border:1px solid var(--border);border-radius:100px;padding:4px 13px;font-size:12px;color:var(--muted);white-space:nowrap}
+.top-row .position-tag{background:color-mix(in srgb,var(--accent) 7%,transparent);border-color:color-mix(in srgb,var(--accent) 25%,transparent);color:var(--accent2)}
+
+.td-bar{min-width:100px}
+.lb-bar-bg{height:4px;background:var(--border);border-radius:2px;overflow:hidden}
+.lb-bar-fill{height:100%;background:linear-gradient(90deg,var(--accent3),var(--accent));border-radius:2px;transition:width .8s ease}
+.td-score{text-align:right;white-space:nowrap}
+.score-num{font-family:var(--font-head);font-size:26px;font-weight:700;color:var(--accent);line-height:1}
+.score-label{font-size:10px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-top:2px}
+
+.empty-state{text-align:center;padding:60px 20px;color:var(--muted);font-size:14px}
+.empty-state .icon{font-size:40px;margin-bottom:12px;opacity:.4}
+
+footer{text-align:center;padding:36px 20px;font-size:11px;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase;opacity:.5}
+
+/* ── MODALS ── */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.78);backdrop-filter:blur(8px);z-index:100;align-items:center;justify-content:center;padding:16px}
+.modal-overlay.open{display:flex}
+.modal{background:var(--bg2);border:1px solid var(--border-hi);border-radius:var(--radius-lg);padding:32px;width:100%;max-width:460px;position:relative;animation:fadeUp .22s ease}
+.t4 .modal{box-shadow:0 20px 60px rgba(0,0,0,.35)}
+@keyframes fadeUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+.modal-close{position:absolute;top:14px;right:14px;background:none;border:none;color:var(--muted);font-size:20px;cursor:pointer;transition:color .2s;line-height:1;padding:4px}
+.modal-close:hover{color:var(--text)}
+.modal h2{font-family:var(--font-head);font-size:21px;color:var(--text);margin-bottom:22px}
+.modal h2 span{color:var(--accent)}
+
+label{display:block;font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
+input,select,textarea{width:100%;background:var(--bg);border:1px solid var(--border);border-radius:var(--radius);padding:11px 14px;font-family:var(--font-body);font-size:14px;color:var(--text);outline:none;margin-bottom:16px;transition:border-color .2s;resize:none}
+.t4 input,.t4 select,.t4 textarea{background:#111A14}
+input:focus,select:focus,textarea:focus{border-color:var(--accent)}
+select option{background:var(--bg)}
+textarea{min-height:72px;line-height:1.5}
+
+.btn{width:100%;padding:12px;border-radius:100px;border:none;font-family:var(--font-body);font-size:13px;letter-spacing:1px;font-weight:600;cursor:pointer;transition:all .2s;margin-bottom:10px}
+.btn-gold{background:linear-gradient(135deg,var(--accent3),var(--accent));color:var(--bg)}
+.t4 .btn-gold{color:#fff}
+.btn-gold:hover{opacity:.88;transform:translateY(-1px)}
+.btn-danger{background:rgba(220,60,60,.12);border:1px solid rgba(220,60,60,.3);color:#E87A7A}
+.btn-danger:hover{background:rgba(220,60,60,.22)}
+
+.modal-tabs{display:flex;gap:7px;margin-bottom:22px}
+.tab-btn{flex:1;padding:9px;border-radius:var(--radius);border:1px solid var(--border);background:transparent;color:var(--muted);font-family:var(--font-body);font-size:11px;cursor:pointer;transition:all .2s}
+.tab-btn.active{background:color-mix(in srgb,var(--accent) 12%,transparent);border-color:var(--border-hi);color:var(--accent)}
+.tab-content{display:none}
+.tab-content.active{display:block}
+
+.msg{font-size:12px;padding:9px 13px;border-radius:var(--radius);margin-top:2px;margin-bottom:10px}
+.msg.error{background:rgba(220,60,60,.12);color:#E87A7A;border:1px solid rgba(220,60,60,.25)}
+.msg.success{background:rgba(76,175,125,.12);color:var(--green);border:1px solid rgba(76,175,125,.25)}
+
+.employee-list-mini{max-height:190px;overflow-y:auto;margin-bottom:14px}
+.emp-mini-row{display:flex;align-items:center;justify-content:space-between;padding:9px 11px;border-radius:var(--radius);background:var(--bg);border:1px solid var(--border);margin-bottom:5px;gap:10px}
+.emp-mini-name{font-size:13px;flex:1}
+.emp-mini-score{font-family:var(--font-head);font-size:15px;color:var(--accent)}
+.emp-mini-del{background:none;border:none;cursor:pointer;color:var(--muted);font-size:15px;transition:color .2s;padding:2px 4px}
+.emp-mini-del:hover{color:#E87A7A}
+
+/* Criteria selector */
+.criteria-btns{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:14px}
+.crit-sel-btn{padding:11px 9px;border-radius:var(--radius);border:1px solid var(--border);background:var(--bg);color:var(--text);font-family:var(--font-body);font-size:11px;cursor:pointer;text-align:left;transition:all .2s;line-height:1.4}
+.crit-sel-btn:hover{border-color:var(--border-hi);background:color-mix(in srgb,var(--accent) 5%,var(--bg))}
+.crit-sel-btn.selected{border-color:var(--accent);background:color-mix(in srgb,var(--accent) 10%,var(--bg))}
+.crit-sel-btn .pts{font-family:var(--font-head);font-size:17px;color:var(--accent);display:block;margin-bottom:3px}
+
+/* Comment field - revealed after crit selection */
+.comment-wrap{overflow:hidden;max-height:0;transition:max-height .3s ease,opacity .3s ease;opacity:0}
+.comment-wrap.visible{max-height:140px;opacity:1}
+
+.pw-screen{text-align:center}
+.pw-screen .lock{font-size:38px;margin-bottom:14px}
+.pw-screen p{font-size:13px;color:var(--muted);margin-bottom:22px}
+
+/* ── HISTORY MODAL ── */
+#historyOverlay .modal{max-width:520px;max-height:88vh;display:flex;flex-direction:column;padding:26px 26px 18px}
+.hist-header{display:flex;align-items:center;gap:14px;margin-bottom:18px;flex-shrink:0}
+.hist-avatar{width:54px;height:54px;border-radius:50%;background:var(--mid);border:2px solid var(--border-hi);display:flex;align-items:center;justify-content:center;font-family:var(--font-head);font-size:19px;font-weight:700;color:var(--accent);flex-shrink:0}
+.hist-name{font-family:var(--font-head);font-size:18px;color:var(--text);line-height:1.2}
+.hist-role{font-size:12px;color:var(--muted);margin-top:3px}
+.hist-total{margin-left:auto;text-align:right;flex-shrink:0}
+.hist-total-num{font-family:var(--font-head);font-size:30px;color:var(--accent);line-height:1;font-weight:700}
+.hist-total-lbl{font-size:10px;color:var(--muted);letter-spacing:1px;text-transform:uppercase}
+.hist-divider{height:1px;background:var(--border);margin-bottom:13px;flex-shrink:0}
+.hist-sec{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:11px;flex-shrink:0}
+.hist-list{overflow-y:auto;flex:1;min-height:0;padding-right:4px}
+.hist-empty{text-align:center;padding:36px 0;color:var(--muted);font-size:13px}
+.hist-empty .icon{font-size:30px;margin-bottom:9px;opacity:.4}
+.hist-item{padding:12px 13px;border-radius:var(--radius);background:var(--bg);border:1px solid var(--border);margin-bottom:7px;transition:border-color .15s}
+.hist-item:hover{border-color:var(--border-hi)}
+.hist-item-top{display:flex;align-items:center;gap:11px}
+.hist-ic{width:34px;height:34px;border-radius:9px;background:rgba(128,128,128,.06);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
+.hist-item.pos .hist-ic{background:color-mix(in srgb,var(--accent) 10%,transparent);border-color:color-mix(in srgb,var(--accent) 25%,transparent)}
+.hist-item.neg .hist-ic{background:rgba(220,60,60,.08);border-color:rgba(220,60,60,.2)}
+.hist-info{flex:1;min-width:0}
+.hist-crit{font-size:13px;color:var(--text);font-weight:500}
+.hist-time{font-size:10px;color:var(--muted);margin-top:1px}
+.hist-delta{font-family:var(--font-head);font-size:19px;font-weight:700;flex-shrink:0;min-width:40px;text-align:right}
+.hist-delta.pos{color:var(--accent)}
+.hist-delta.neg{color:#E87A7A}
+.hist-comment{font-size:12px;color:var(--muted);margin-top:8px;padding-top:8px;border-top:1px solid var(--border);line-height:1.5;font-style:italic}
+.hist-comment::before{content:'"';margin-right:2px;color:var(--accent);opacity:.6}
+.hist-comment::after{content:'"';margin-left:2px;color:var(--accent);opacity:.6}
+
+::-webkit-scrollbar{width:4px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--border-hi);border-radius:2px}
+@media(max-width:600px){.td-bar{display:none}.emp-fullname{font-size:13px}.score-num{font-size:22px}.position-tag{font-size:11px;padding:4px 10px}.criteria-btns{grid-template-columns:1fr}}
+</style>
+</head>
+<body class="t1">
+
+<div class="container">
+
+  <!-- THEME SWITCHER -->
+  <div class="theme-bar">
+    <span class="theme-label">თემა</span>
+    <button class="theme-btn tb1 active" onclick="setTheme(1)" title="Sage Morning"></button>
+    <button class="theme-btn tb2" onclick="setTheme(2)" title="Mint Breeze"></button>
+    <button class="theme-btn tb3" onclick="setTheme(3)" title="Forest Linen"></button>
+    <button class="theme-btn tb4" onclick="setTheme(4)" title="Emerald Dusk"></button>
+    <button class="theme-btn tb5" onclick="setTheme(5)" title="Celadon Mist"></button>
+  </div>
+
+  <!-- HEADER -->
+  <header>
+    <div class="resort-label">Lopota Lake Resort &amp; Spa</div>
+    <h1>Service <span>Stars</span></h1>
+    <div class="header-divider"><div class="divider-diamond"></div></div>
+    <div class="month-badge"><div class="dot"></div><span id="currentMonth">—</span></div>
+  </header>
+
+  <!-- CRITERIA -->
+  <section class="criteria-section">
+    <h2>ქულების სისტემა</h2>
+    <div class="criteria-grid">
+      <div class="criteria-card"><div class="crit-icon">💬</div><div><div class="crit-name">სტუმრის პოზიტიური კომენტარი</div><div class="crit-pts">5 <span>ქულა</span></div></div></div>
+      <div class="criteria-card"><div class="crit-icon">⏰</div><div><div class="crit-name">იდეალური პუნქტუალურობა</div><div class="crit-pts">2 <span>ქულა</span></div></div></div>
+      <div class="criteria-card"><div class="crit-icon">💡</div><div><div class="crit-name">ინოვაციური იდეა / ინიციატივა</div><div class="crit-pts">10 <span>ქულა</span></div></div></div>
+      <div class="criteria-card"><div class="crit-icon">🤝</div><div><div class="crit-name">კოლეგის დახმარება (P2P)</div><div class="crit-pts">3 <span>ქულა</span></div></div></div>
+    </div>
+  </section>
+
+  <!-- LEADERBOARD -->
+  <section>
+    <div class="lb-header">
+      <div class="lb-title">Leaderboard</div>
+      <button class="admin-btn" onclick="openAuth()">⚙ ადმინისტრატორი</button>
+    </div>
+    <table class="lb-table" id="lbTable">
+      <thead><tr>
+        <th style="width:50px">#</th>
+        <th>სახელი / გვარი</th>
+        <th>პოზიცია</th>
+        <th class="td-bar"></th>
+        <th class="th-right">ქულა</th>
+      </tr></thead>
+      <tbody id="lbBody"></tbody>
+    </table>
+    <div class="empty-state" id="emptyState" style="display:none">
+      <div class="icon">🏆</div>
+      <div>თანამშრომლები ჯერ არ არიან დამატებული</div>
+    </div>
+  </section>
+
+  <footer>Lopota Lake Resort &amp; Spa · Service Stars · <span id="footerYear"></span></footer>
+</div>
+
+<!-- ADMIN MODAL -->
+<div class="modal-overlay" id="modalOverlay" onclick="closeOnOverlay(event)">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <div id="authScreen" class="pw-screen">
+      <div class="lock">🔐</div>
+      <h2>ადმინ <span>პანელი</span></h2>
+      <p>პარამეტრების შესაცვლელად შეიყვანეთ პაროლი</p>
+      <label>პაროლი</label>
+      <input type="password" id="pwInput" placeholder="••••••" onkeydown="if(event.key==='Enter')checkAuth()"/>
+      <div class="msg error" id="pwError" style="display:none">არასწორი პაროლი</div>
+      <button class="btn btn-gold" onclick="checkAuth()">შესვლა</button>
+    </div>
+    <div id="adminPanel" style="display:none">
+      <h2>ადმინ <span>პანელი</span></h2>
+      <div class="modal-tabs">
+        <button class="tab-btn active" onclick="switchTab('addScore')">ქულა</button>
+        <button class="tab-btn" onclick="switchTab('addEmp')">თანამშრომელი</button>
+        <button class="tab-btn" onclick="switchTab('manage')">მართვა</button>
+      </div>
+
+      <!-- TAB: Score -->
+      <div class="tab-content active" id="tab-addScore">
+        <label>თანამშრომელი</label>
+        <select id="scoreEmpSel"></select>
+        <label>კრიტერიუმი</label>
+        <div class="criteria-btns">
+          <button class="crit-sel-btn" data-pts="5"  data-label="სტუმრის კომენტარი" data-icon="💬" onclick="selectCrit(this)">
+            <span class="pts">5</span>სტუმრის კომენტარი 💬
+          </button>
+          <button class="crit-sel-btn" data-pts="2"  data-label="პუნქტუალურობა"    data-icon="⏰" onclick="selectCrit(this)">
+            <span class="pts">2</span>პუნქტუალურობა ⏰
+          </button>
+          <button class="crit-sel-btn" data-pts="10" data-label="ინოვაციური იდეა"  data-icon="💡" onclick="selectCrit(this)">
+            <span class="pts">10</span>ინოვაცია 💡
+          </button>
+          <button class="crit-sel-btn" data-pts="3"  data-label="P2P დახმარება"    data-icon="🤝" onclick="selectCrit(this)">
+            <span class="pts">3</span>P2P დახმარება 🤝
+          </button>
+        </div>
+        <!-- Comment field -->
+        <div class="comment-wrap" id="commentWrap">
+          <label>კომენტარი (არასავალდებულო)</label>
+          <textarea id="scoreComment" placeholder="დაამატეთ დეტალი ან შენიშვნა..."></textarea>
+        </div>
+        <div class="msg" id="scoreMsg" style="display:none"></div>
+        <button class="btn btn-gold" onclick="addScore(1)">+ ქულის დამატება</button>
+        <button class="btn btn-danger" onclick="addScore(-1)">− ქულის გამოქვითვა</button>
+      </div>
+
+      <!-- TAB: Employee -->
+      <div class="tab-content" id="tab-addEmp">
+        <label>სახელი გვარი</label>
+        <input type="text" id="empName" placeholder="მაგ. გიორგი ბერიძე"/>
+        <label>პოზიცია</label>
+        <input type="text" id="empRole" placeholder="მაგ. რეცეფციონისტი"/>
+        <div class="msg" id="empMsg" style="display:none"></div>
+        <button class="btn btn-gold" onclick="addEmployee()">თანამშრომლის დამატება</button>
+      </div>
+
+      <!-- TAB: Manage -->
+      <div class="tab-content" id="tab-manage">
+        <label>თანამშრომლების სია</label>
+        <div class="employee-list-mini" id="empMiniList"></div>
+        <div class="msg" id="manageMsg" style="display:none"></div>
+        <button class="btn btn-danger" onclick="confirmReset()">🗑 ქულების ანულირება (ახალი თვე)</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- HISTORY MODAL -->
+<div class="modal-overlay" id="historyOverlay" onclick="closeHistOverlay(event)">
+  <div class="modal">
+    <button class="modal-close" onclick="closeHist()">✕</button>
+    <div class="hist-header">
+      <div class="hist-avatar" id="hAvatar"></div>
+      <div>
+        <div class="hist-name" id="hName"></div>
+        <div class="hist-role" id="hRole"></div>
+      </div>
+      <div class="hist-total">
+        <div class="hist-total-num" id="hTotal"></div>
+        <div class="hist-total-lbl">სულ ქულა</div>
+      </div>
+    </div>
+    <div class="hist-divider"></div>
+    <div class="hist-sec">ქულების ისტორია</div>
+    <div class="hist-list" id="hList"></div>
+  </div>
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getDatabase, ref, set, onValue, remove } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+
+/* ── FIREBASE CONFIG ── */
+const firebaseConfig = {
+  databaseURL: "https://lopota-stars-default-rtdb.europe-west1.firebasedatabase.app"
+};
+const app = initializeApp(firebaseConfig);
+const db  = getDatabase(app);
+const ROOT = ref(db, "leaderboard");
+
+/* ── CONSTANTS ── */
+var PASS="1313!";
+var MO=["იანვარი","თებერვალი","მარტი","აპრილი","მაისი","ივნისი","ივლისი","აგვისტო","სექტემბერი","ოქტომბერი","ნოემბერი","დეკემბერი"];
+var WD=["კვი","ორშ","სამ","ოთხ","ხუთ","პარ","შაბ"];
+
+/* ── STATE ── */
+var S = { employees:[], month: monthKey(), nextId:1 };
+
+/* Theme stays in localStorage (per-device preference) */
+var currentTheme = parseInt(localStorage.getItem("lopota_theme")||"1");
+applyTheme(currentTheme);
+
+/* ── FIREBASE: listen for changes (realtime sync) ── */
+onValue(ROOT, function(snapshot) {
+  var data = snapshot.val();
+  if (data) {
+    // auto-reset scores if new month
+    var m = monthKey();
+    if (data.month !== m) {
+      (data.employees||[]).forEach(function(e){ e.score=0; e.history=[]; });
+      data.month = m;
+      set(ROOT, data);
+    }
+    S = data;
+    if (!S.employees) S.employees = [];
+  } else {
+    S = { employees:[], month: monthKey(), nextId:1 };
+  }
+  render();
+  if (authed) refAdmin();
+});
+
+function monthKey() {
+  var n = new Date();
+  return n.getFullYear()*100 + n.getMonth();
+}
+
+/* ── SAVE TO FIREBASE ── */
+function sv() {
+  set(ROOT, JSON.parse(JSON.stringify(S)));
+}
+
+/* ── HELPERS ── */
+function ini(n){return(n||"?").split(" ").map(function(w){return w[0]}).join("").slice(0,2).toUpperCase()}
+function esc(s){return(s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;")}
+function pad(n){return String(n).padStart(2,"0")}
+function fmtTs(ts){var d=new Date(ts);return WD[d.getDay()]+", "+pad(d.getDate())+"."+pad(d.getMonth()+1)+"  "+pad(d.getHours())+":"+pad(d.getMinutes())}
+
+/* ── THEME ── */
+function setTheme(n){
+  currentTheme=n;
+  localStorage.setItem("lopota_theme",String(n));
+  applyTheme(n);
+}
+function applyTheme(n){
+  document.body.className="t"+n;
+  document.querySelectorAll(".theme-btn").forEach(function(b,i){
+    b.classList.toggle("active",i+1===n);
+  });
+}
+window.setTheme = setTheme;
+
+/* ── RENDER ── */
+function render(){
+  var now=new Date();
+  document.getElementById("currentMonth").textContent=MO[now.getMonth()]+" "+now.getFullYear();
+  document.getElementById("footerYear").textContent=now.getFullYear();
+  var sorted=(S.employees||[]).slice().sort(function(a,b){return b.score-a.score});
+  var max=sorted.length?Math.max(sorted[0].score,1):1;
+  var tbody=document.getElementById("lbBody");
+  var empty=document.getElementById("emptyState");
+  var tbl=document.getElementById("lbTable");
+  tbody.innerHTML="";
+  if(!sorted.length){empty.style.display="block";tbl.style.display="none";return}
+  empty.style.display="none";tbl.style.display="table";
+  var medals=["🥇","🥈","🥉"];
+  var rc=["gold","silver","bronze"];
+  sorted.forEach(function(emp,i){
+    var rank=i+1;
+    var pct=(emp.score/max*100).toFixed(1);
+    var tr=document.createElement("tr");
+    if(rank<=3)tr.classList.add("top-row");
+    (function(id){tr.onclick=function(){openHist(id)}})(emp.id);
+    var badge=rank<=3?'<div class="rank-badge '+rc[i]+'">'+ medals[i]+'</div>':'<div class="rank-badge">'+rank+'</div>';
+    tr.innerHTML=
+      '<td>'+badge+'</td>'+
+      '<td><div class="emp-cell"><div class="emp-avatar">'+ini(emp.name)+'</div>'+
+        '<div><div class="emp-fullname">'+esc(emp.name)+'</div>'+
+        '<div class="emp-hint">📋 ქულების ისტორია</div></div></div></td>'+
+      '<td><span class="position-tag">'+esc(emp.role)+'</span></td>'+
+      '<td class="td-bar"><div class="lb-bar-bg"><div class="lb-bar-fill" style="width:'+pct+'%"></div></div></td>'+
+      '<td class="td-score"><div class="score-num">'+emp.score+'</div><div class="score-label">ქულა</div></td>';
+    tbody.appendChild(tr);
+  });
+}
+
+/* ── HISTORY ── */
+function openHist(id){
+  var emp=null;(S.employees||[]).forEach(function(x){if(x.id===id)emp=x});if(!emp)return;
+  document.getElementById("hAvatar").textContent=ini(emp.name);
+  document.getElementById("hName").textContent=emp.name;
+  document.getElementById("hRole").textContent=emp.role;
+  document.getElementById("hTotal").textContent=emp.score;
+  var list=document.getElementById("hList");
+  var hist=emp.history||[];
+  if(!hist.length){
+    list.innerHTML='<div class="hist-empty"><div class="icon">📋</div><div>ქულა ჯერ არ დამატებულა</div></div>';
+  }else{
+    var h2="";
+    hist.slice().reverse().forEach(function(h){
+      var pos=h.delta>0;
+      var sign=pos?"+":"";
+      var commentHtml=h.comment?'<div class="hist-comment">'+esc(h.comment)+'</div>':"";
+      h2+='<div class="hist-item '+(pos?"pos":"neg")+'">'+
+        '<div class="hist-item-top">'+
+          '<div class="hist-ic">'+h.icon+'</div>'+
+          '<div class="hist-info">'+
+            '<div class="hist-crit">'+esc(h.label)+'</div>'+
+            '<div class="hist-time">'+fmtTs(h.ts)+'</div>'+
+          '</div>'+
+          '<div class="hist-delta '+(pos?"pos":"neg")+'">'+ sign+h.delta+'</div>'+
+        '</div>'+
+        commentHtml+
+        '</div>';
+    });
+    list.innerHTML=h2;
+  }
+  document.getElementById("historyOverlay").classList.add("open");
+}
+function closeHist(){document.getElementById("historyOverlay").classList.remove("open")}
+function closeHistOverlay(ev){if(ev.target===document.getElementById("historyOverlay"))closeHist()}
+window.closeHist=closeHist;
+window.closeHistOverlay=closeHistOverlay;
+
+/* ── AUTH ── */
+var authed=false;
+function openAuth(){
+  document.getElementById("modalOverlay").classList.add("open");
+  document.getElementById("authScreen").style.display=authed?"none":"block";
+  document.getElementById("adminPanel").style.display=authed?"block":"none";
+  if(authed){refAdmin();switchTab("addScore")}
+}
+function checkAuth(){
+  if(document.getElementById("pwInput").value===PASS){
+    authed=true;
+    document.getElementById("authScreen").style.display="none";
+    document.getElementById("adminPanel").style.display="block";
+    document.getElementById("pwInput").value="";
+    document.getElementById("pwError").style.display="none";
+    refAdmin();switchTab("addScore");
+  }else{document.getElementById("pwError").style.display="block"}
+}
+function closeModal(){document.getElementById("modalOverlay").classList.remove("open");clearMsgs()}
+function closeOnOverlay(ev){if(ev.target===document.getElementById("modalOverlay"))closeModal()}
+window.openAuth=openAuth;
+window.checkAuth=checkAuth;
+window.closeModal=closeModal;
+window.closeOnOverlay=closeOnOverlay;
+
+function switchTab(tab){
+  var tabs=["addScore","addEmp","manage"];
+  document.querySelectorAll(".tab-btn").forEach(function(b,i){b.classList.toggle("active",tabs[i]===tab)});
+  document.querySelectorAll(".tab-content").forEach(function(t){t.classList.remove("active")});
+  document.getElementById("tab-"+tab).classList.add("active");
+  clearMsgs();
+  if(tab==="manage")renderMini();
+}
+window.switchTab=switchTab;
+
+/* ── CRIT SELECT ── */
+var selPts=null,selLabel="",selIcon="⭐";
+function selectCrit(btn){
+  document.querySelectorAll(".crit-sel-btn").forEach(function(b){b.classList.remove("selected")});
+  btn.classList.add("selected");
+  selPts=parseInt(btn.dataset.pts);
+  selLabel=btn.dataset.label;
+  selIcon=btn.dataset.icon;
+  document.getElementById("commentWrap").classList.add("visible");
+  document.getElementById("scoreComment").focus();
+}
+window.selectCrit=selectCrit;
+
+/* ── SCORE ── */
+function refAdmin(){
+  var sel=document.getElementById("scoreEmpSel");
+  sel.innerHTML=(S.employees&&S.employees.length)
+    ?S.employees.map(function(x){return'<option value="'+x.id+'">'+esc(x.name)+' — '+x.score+' ქ.</option>'}).join("")
+    :'<option value="">— თანამშრომელი არ არის —</option>';
+  renderMini();
+}
+function addScore(dir){
+  var id=parseInt(document.getElementById("scoreEmpSel").value);
+  if(!id){showMsg("scoreMsg","error","პირველ რიგში დაამატეთ თანამშრომელი");return}
+  if(!selPts){showMsg("scoreMsg","error","აირჩიეთ კრიტერიუმი");return}
+  var emp=null;(S.employees||[]).forEach(function(x){if(x.id===id)emp=x});if(!emp)return;
+  var delta=selPts*dir;
+  var ns=Math.max(0,emp.score+delta);
+  var actual=ns-emp.score;
+  if(actual===0&&dir<0){showMsg("scoreMsg","error","ქულა უკვე 0-ია");return}
+  emp.score=ns;
+  if(!emp.history)emp.history=[];
+  var comment=document.getElementById("scoreComment").value.trim();
+  emp.history.push({ts:Date.now(),delta:actual,label:selLabel,icon:selIcon,comment:comment||""});
+  document.getElementById("scoreComment").value="";
+  sv();
+  showMsg("scoreMsg","success",emp.name+": "+(actual>0?"+":"")+actual+" ქ. (სულ: "+emp.score+")");
+}
+window.addScore=addScore;
+
+/* ── EMPLOYEE ── */
+function addEmployee(){
+  var name=document.getElementById("empName").value.trim();
+  var role=document.getElementById("empRole").value.trim();
+  if(!name){showMsg("empMsg","error","შეიყვანეთ სახელი");return}
+  if(!S.employees)S.employees=[];
+  S.employees.push({id:S.nextId++,name:name,role:role||"—",score:0,history:[]});
+  sv();
+  document.getElementById("empName").value="";document.getElementById("empRole").value="";
+  showMsg("empMsg","success",name+" წარმატებით დაემატა!");
+}
+window.addEmployee=addEmployee;
+
+function renderMini(){
+  var el=document.getElementById("empMiniList");
+  if(!(S.employees&&S.employees.length)){el.innerHTML='<div style="color:var(--muted);font-size:13px;padding:8px">თანამშრომელი არ არის</div>';return}
+  el.innerHTML=S.employees.map(function(x){
+    return'<div class="emp-mini-row">'+
+      '<div class="emp-mini-name">'+esc(x.name)+'<br><span style="font-size:10px;color:var(--muted)">'+esc(x.role)+'</span></div>'+
+      '<div class="emp-mini-score">'+x.score+'</div>'+
+      '<button class="emp-mini-del" onclick="delEmp('+x.id+')">🗑</button>'+
+      '</div>';
+  }).join("");
+}
+function delEmp(id){
+  var emp=null;(S.employees||[]).forEach(function(x){if(x.id===id)emp=x});
+  if(!emp||!confirm("წაშლა: "+emp.name+"?"))return;
+  S.employees=S.employees.filter(function(x){return x.id!==id});
+  sv();showMsg("manageMsg","success",emp.name+" წაშლილია");
+}
+window.delEmp=delEmp;
+
+function confirmReset(){
+  if(!confirm("ყველა ქულა და ისტორია ანულირდება. დარწმუნებული ხართ?"))return;
+  (S.employees||[]).forEach(function(x){x.score=0;x.history=[]});
+  var now=new Date();S.month=now.getFullYear()*100+now.getMonth();
+  sv();showMsg("manageMsg","success","ქულები ანულირებულია ✓");
+}
+window.confirmReset=confirmReset;
+
+function showMsg(id,type,text){
+  var el=document.getElementById(id);el.className="msg "+type;el.textContent=text;el.style.display="block";
+  setTimeout(function(){el.style.display="none"},3500);
+}
+function clearMsgs(){
+  ["scoreMsg","empMsg","manageMsg","pwError"].forEach(function(id){var el=document.getElementById(id);if(el)el.style.display="none"});
+}
+window.clearMsgs=clearMsgs;
+</script>
+</body>
+</html>
